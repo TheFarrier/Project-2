@@ -1,23 +1,20 @@
 module.exports = function (sequelize, DataTypes) {
   const Users = sequelize.define('Users', {
-    name: {
-      type: DataTypes.STRING,
+    username: {
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        len: [3],
+        isEmail: true,
       },
     },
     password: {
       type: DataTypes.TEXT,
       allowNull: false,
-      validate: {
-        len: [8],
-      },
     },
     gamesWon: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-  });
+  }, { freezeTableName: true });
   return Users;
 };
