@@ -16,7 +16,7 @@ module.exports = function (app) {
 
   app.post('/login', (req, res) => {
     const pass = req.body.password;
-
+    
     db.Users.findAll({ where: { username: req.body.username }, raw: true }).then((res) => {
       console.log(res[0].password);
       bcrypt.compare(pass, res[0].password, (err, response) => {
