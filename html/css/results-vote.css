@@ -1,0 +1,118 @@
+html,body {
+background-color: #F4D03F;
+background-image: linear-gradient(132deg, #F4D03F 0%, #16A085 100%);
+font-family: 'Rubik', sans-serif;
+}
+#tile-1 {
+  background-image: url("https://media.giphy.com/media/UbC8wqxR1rVu0/giphy.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#tile-2 {
+  background-image: url("https://media.giphy.com/media/sy6waaLitpIAg/giphy.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#tile-3 {
+  background-image: url("https://media.giphy.com/media/fyNqrQS78Sae4/giphy.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#tile-4 {
+  background-image: url("https://media.giphy.com/media/y4E6VumnBbIfm/giphy.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#tile-5 {
+  text-shadow: 0 0 3px rgb(115, 255, 0);;
+}
+#tile-6 {
+  background-image: url("https://media.giphy.com/media/GnDfd7VGslpNC/giphy.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#tile-7 {
+  background-image: url("https://media.giphy.com/media/uoVUPXJgfy2m4/giphy.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#tile-8 {
+  background-image: url("https://media.giphy.com/media/WUMKrzIPp9YzK/giphy.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+#tile-9 {
+  background-image: url("https://media.giphy.com/media/1tGN00iMCj3Mc/giphy.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.hero-body .container {
+  max-width: 700px;
+}
+.hero-body .title {
+  color: hsl(192,17%,99%) !important;
+}
+.hero-body .subtitle {
+  color: hsl(192,17%,99%) !important;
+  padding-top: 2rem;
+  line-height: 1.5;
+}
+.features {
+  padding: 5rem 0;
+}
+.box.cta {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+.card-image > .fa {
+  font-size: 8rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  color: #209cee;
+}
+.card-content .content {
+  font-size: 14px;
+  margin: 1rem 1rem;
+}
+.card-content .content h4 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.card {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.18);
+  margin-bottom: 2rem;
+}
+.intro {
+  padding: 5rem 0;
+  text-align: center;
+}
+.sandbox {
+  padding: 5rem 0;
+}
+.tile.notification {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.is-shady {
+animation: flyintoright .4s backwards;
+background: #fff;
+box-shadow: rgba(0, 0, 0, .1) 0 1px 0;
+border-radius: 4px;
+display: inline-block;
+margin: 10px;
+position: relative;
+transition: all .2s ease-in-out;
+}
+.is-shady:hover {
+box-shadow: 0 10px 16px rgba(0, 0, 0, .13), 0 6px 6px rgba(0, 0, 0, .19);
+}
+/*adds font awesome stars*/
+footer li:before {
+  content: '\f1b2';
+  font-family: 'FontAwesome';
+  float: left;
+  margin-left: -1.5em;
+  color: #147efb;
+}
