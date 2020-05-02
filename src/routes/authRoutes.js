@@ -48,7 +48,7 @@ module.exports = function router() {
             res.render('signin', { username: req.body.username, passwordErr: info.message });
             break;
           case ('Validated.'):
-            req.login(user, () => res.redirect('/game'));
+            req.login(user.username, () => res.redirect('/game'));
             break;
           default:
             res.redirect('/auth/signin');
