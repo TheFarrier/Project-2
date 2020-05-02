@@ -7,7 +7,7 @@ const app = express();
 const Port = process.env.PORT || 3000;
 
 
-app.use(session({ secret: 'secret', resave: true, saveUninitialized: true }));
+app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
 require('./config/passport.js')(app);
 
 app.use(express.urlencoded({ extended: true }));
