@@ -17,6 +17,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    currentVotes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   });
 
   Players.associate = function (models) {
