@@ -6,7 +6,8 @@
         "node": true
     },
     "extends": [
-        "airbnb-base"
+        "airbnb-base",
+        "jquery"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -16,5 +17,11 @@
         "ecmaVersion": 2018
     },
     "rules": {
+        "no-undef": "off",
+        "space-in-parens": "off",
+        "array-bracket-spacing": "off",
+        "no-unused-vars": "off",
+        "computed-property-spacing": "off",
+        "no-use-before-define": "off"
     }
 }
