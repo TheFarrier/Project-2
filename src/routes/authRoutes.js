@@ -44,11 +44,11 @@ module.exports = function router() {
             break;
           case ('Invalid password.'):
             res.status(401);
-            console.log(info.message);
             res.render('signin', { username: req.body.username, passwordErr: info.message });
             break;
           case ('Validated.'):
-            req.login(user, () => res.redirect('/game'));
+
+            req.login(user.username, () => { res.redirect('/game'); });
             break;
           default:
             res.redirect('/auth/signin');
