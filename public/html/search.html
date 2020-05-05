@@ -1,0 +1,101 @@
+
+<section class="hero is-info is-fullheight">
+    <div class="hero-head">
+        </div>
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="column is-6 is-offset-3">
+                    <h1 class="title">
+                        Display a gif that best describes how your day has been....
+                    </h1>
+                    <h2 class="subtitle">
+                        You have 30 seconds to find a gif...!
+                    </h2>
+                    <div class="box">
+                        <div class="field is-grouped">
+                            <p class="control is-expanded">
+                                <!--Change this to a form with the class "search"
+                                -inside the form have the input or text area,
+                                -make a button inside the form with type="submit"
+                                -->
+                                <form action="" class="gif-search">
+                                    <input class="searchInput" type="text" placeholder="Search a GIPHY Gif">
+                                    <button class="searchBtn">
+                                      Search for a GIF
+                                    </button>
+                                </form>
+                                
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="container">
+            <div class="notification">
+                This container is <strong>centered</strong> on desktop.
+            </div>
+            </div>-->
+<div class="gif-container">
+
+   </div>
+</section>
+
+<script>
+    const gifSearch = $(".searchBtn"); // The form that we submit when searching
+const selectionBtn = $("img.image"); // The selection box from after the search
+const gifContainer = $(".gif-container");
+
+gifSearch.on("click", (event) => {
+  event.preventDefault();
+  gifContainer.empty();
+  const gifKeyword = $("input.searchInput");
+  console.log("Began search for "+ gifKeyword.val());
+  const queryURL = `http://api.giphy.com/v1/gifs/search?q=${gifKeyword.val().trim()}&api_key=PgqiZ72BDLSFVrW4QL7p7F3gUgiXSbLo`;
+
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then((response) => {
+    const randomArray = [];
+
+    // pushes 5 random numbers between 0 and 24 to an array
+    while (randomArray.length < 5) {
+      const x = Math.floor(Math.random() * 25);
+      if (!randomArray.includes(x)) {
+        randomArray.push(x);
+      }
+    }
+    console.log(randomArray);
+    for (let i = 0; i < 5; i += 1) {
+      const newGif = $("<img>").addClass("image");
+      const gifUrl = response.data[randomArray[i]].images.fixed_height.url;
+      newGif.attr("src", gifUrl) ;
+      newGif.on("click", selectGif);
+
+      gifContainer.append(newGif);
+    }
+  });
+});
+
+function selectGif() {
+  url = $(this).attr("src")
+  const selectionData = {
+    playerName: req.user, 
+    selection: url
+  };
+
+  sendSelection(selectionData);
+};
+
+function sendSelection(data) {
+  $.put("/api/selection", {
+    name: data.playerName,
+    selection: data.selection
+  })
+    .then((data) => {
+      console.log("selection submited to database");
+    })
+    .catch(handleError);
+}
+</script>
