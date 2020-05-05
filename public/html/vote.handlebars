@@ -1,0 +1,30 @@
+
+        <section class="container">
+            <div class="sandbox">
+                <div class="tile is-ancestor">
+                    {{#each Players}}
+
+                    <div class="tile is-parent is-shady has-text-centered">
+                        <article class="tile is-child notification is-white" id="tile-2">
+                            <img src="{{this.selection}}" class = "vote" data="{{this.name}}"alt="">
+                        </article>
+                    </div>
+
+                    {{/each}}
+                </div>
+             </div>
+        </section>
+
+        <script>
+            $(".vote").on("click", (event) => {
+                event.preventDefault();
+                $.put("/api/vote", {
+                    name: $(this).data()
+                })
+                    .then((data) => {
+                    console.log("selection submited to database");
+                    })
+                    .catch(handleError);
+            });
+        </script>
+     
