@@ -1,22 +1,28 @@
-const express = require('express');
-const exphbs = require('express-handlebars');
-const db = require('./models');
-
+const express = require( "express" );
+const exphbs = require( "express-handlebars" );
+const session = require( "express-session" );
+const db = require( "./models" );
 
 const app = express();
-
 const Port = process.env.PORT || 3000;
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static('public'));
 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
-app.set('view engine', 'handlebars');
+app.use( session( { secret: "secret", resave: false, saveUninitialized: false } ) );
+require( "./config/passport.js" )( app );
 
-require('./routes/server-routes')(app);
+app.use( express.urlencoded( { extended: true } ) );
+app.use( express.json() );
+app.use( express.static( "public" ) );
+app.engine( "handlebars", exphbs( { defaultLayout: "main" } ) );
+app.set( "view engine", "handlebars" );
 
-db.sequelize.sync().then(() => {
+const authRouter = require( "./src/routes/authRoutes.js" );
+const serverRouter = require( "./src/routes/serverRoutes.js" );
+
+app.use( "/auth", authRouter() );
+app.use( "/game", serverRouter() );
+
+db.sequelize.sync().then( () => {
   // eslint-disable-next-line no-console
-  app.listen(Port, () => console.log(`Example app listening at http://localhost:${Port}`));
-});
+  app.listen( Port, () => console.log( `Example app listening at http://localhost:${Port}` ) );
+} );
