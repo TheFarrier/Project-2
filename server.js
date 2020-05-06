@@ -24,7 +24,7 @@ app.use('/game', serverRouter());
 
 db.sequelize.sync().then(() => {
   // eslint-disable-next-line no-console
-  const expressServer = app.listen(Port, () => console.log(`Example app listening at http://localhost:${Port}`));
+  const expressServer = app.listen(3000, '0.0.0.0', () => console.log(`Example app listening at http://localhost:${Port}`));
   const io = socketio(expressServer);
   io.use((socket, next) => {
     sessionMiddleware(socket.request, socket.request.res || {}, next);

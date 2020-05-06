@@ -3,6 +3,7 @@ const fs = require('fs');
 
 function mainSocket(io) {
 let players = [];
+
 io.on('connection', (socket) => {
     if (socket.request.session.passport) {
       let playerTag = socket.request.session.passport.user;
@@ -17,8 +18,6 @@ io.on('connection', (socket) => {
       socket.emit('redirect', { url: 'http://localhost:3000/auth/logout' });
     }
   });
-
-
 }
 
 module.exports = mainSocket;
