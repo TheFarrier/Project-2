@@ -42,9 +42,7 @@ function mainSocket(io) {
     {
       gameTime -= 1;
     }
-    socket.on('gifSelected', () => {
-      console.log(socket.request.session.passport.user)
-    })
+
     socket.on('playerReady', (data) => {
       readyCheck.push(data.ready);
       if(readyCheck.length === maxPlayers){
