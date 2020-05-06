@@ -13,11 +13,25 @@ html,body {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
+
+.h1 {
+    color: coral;
+ 
+}
+
 .hero .subtitle {
   padding: 1rem 0;
   line-height: 1.5;
+  font-weight: bold;
 }
+
 .tile {
-		border-radius: 0pt;
-		
+    border-radius: 0pt;
+}
+
+.seconds {
+	font-family: raleway, sans-serif;
+	font-weight: 500;
+	font-size: 50px;
+	margin: 0;
 }
