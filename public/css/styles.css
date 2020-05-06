@@ -6,17 +6,18 @@ body, html{
 body {
  display: flex;
  flex-direction: column;
- background-image: linear-gradient(-90deg, rgb(196, 80, 192), rgb(72, 87, 207));
+
 }
 /*--Landing Page--*/
-.content{
+.main-landing-pg{
   flex: 1 0 auto;
+  background-image: linear-gradient(-120deg, rgb(196, 80, 192), rgb(72, 87, 207));
 }
 .welcome-text{
   margin-top: 10px;
    color: white;
    text-align: center;
-   background-image: linear-gradient(-90deg, rgb(196, 80, 192), rgba(255, 255, 255, 0.192),rgb(72, 87, 207));
+   background-image: linear-gradient(-120deg, rgb(196, 80, 192), rgba(255, 255, 255, 0.192),rgb(72, 87, 207));
 }
 #auth-form{
   width: 30%;
@@ -29,6 +30,10 @@ body {
   color: white;
 }
 /*--Navigation--*/
+.navbar{
+  padding-left: 20px;
+  padding-right: 20px;
+}
 .navbar-brand{
   font-size: 2rem;
 }
@@ -42,7 +47,7 @@ body {
   display: inline;
   margin-right: 15px;
   padding: 0px 5px 5px 0px;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 .nav-link:hover
 {
@@ -61,9 +66,62 @@ body {
  font-size: .5rem;
 }
 /*--Game Page--*/
+.game-landing-pg
+{
+  flex: 1 0 auto;
+  background-image: linear-gradient(-120deg,rgb(250, 113, 153), rgb(250, 113, 153), rgb(255, 229, 98));
+}
+#mainWindow{
+  margin-top: 20px;
+  width: 90%;
+}
 #gameWindow{
-  background-color: red;
+  padding-top: 40px;
 }
 #chatWindow{
-  background-color: blue;
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  max-height: 80vh;
+  min-height: 80vh;
+  padding: 0;
+}
+#user-message{
+  width: 100%;
+}
+.user-name{
+  font-weight: bold;
+}
+.user-name .message-text{
+  font-weight: lighter;
+}
+#messages{
+  position: relative;
+  list-style-type: none; margin: 0; padding: 0; 
+  color: #3B4048;
+  max-height: 92%;
+  min-height: 92%;
+  overflow-y: scroll;
+  overflow-wrap: break-word ;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+.message-form { 
+  margin: 0px; margin-bottom: 10px;
+  position: absolute;
+  bottom: 0;
+  width: 98%
+}
+/*--Ready Page--*/
+
+  
+#ready-box{
+  text-align: center;
+}
+.announcer-gif{
+  margin-top: 20px;
+}
+.ready-up{
+  margin: 28px auto 0px auto;
+  font-size: 2rem;
+  display: block; 
 }
