@@ -10,7 +10,13 @@ module.exports = function router() {
       if (req.user) {
         return res.redirect('/game');
       }
-      return res.render('register');
+      return res.render('register_login', {
+        cardTitle: 'Register', 
+        formAction: '/auth/register', 
+        typeSubmit: 'Register',
+        redirectUrl: '/auth/login',
+        redirectText: 'Already have an account?',
+      });
     })
     .post((req, res) => {
       db.User.create({
@@ -25,33 +31,54 @@ module.exports = function router() {
   authRouter.route('/logout')
     .get((req, res) => {
       req.logout();
-      res.redirect('signin');
+      res.redirect('/auth/login');
     });
-  authRouter.route('/signin')
+  authRouter.route('/login')
     .get((req, res) => {
       if (req.user) {
         return res.redirect('/game');
       }
-      return res.render('signin');
+      return res.render('register_login', {
+        cardTitle: 'Login',
+        formAction: '/auth/login',
+        typeSubmit: 'Login',
+        redirectUrl: '/auth/register',
+        redirectText: 'Need an account?',
+      });
     })
     .post((req, res) => {
       passport.authenticate('local', (err, user, info) => {
         switch (info.message) {
           case ('Invaild username.'):
             res.status(401);
-            console.log(info.message);
-            res.render('signin', { username: req.body.username, usernameErr: info.message });
+            res.render('register_login', {
+              cardTitle: 'Login',
+              formAction: '/auth/login',
+              typeSubmit: 'Login',
+              redirectUrl: '/auth/register',
+              redirectText: 'Need an account?',
+              username: req.body.username,
+              usernameErr: info.message,
+            });
             break;
           case ('Invalid password.'):
             res.status(401);
-            res.render('signin', { username: req.body.username, passwordErr: info.message });
+            res.render('register_login', {
+              cardTitle: 'Login',
+              formAction: '/auth/login',
+              typeSubmit: 'Login',
+              redirectUrl: '/auth/register',
+              redirectText: 'Need an account?',
+              username: req.body.username,
+              passwordErr: info.message,
+            });
             break;
           case ('Validated.'):
 
             req.login(user.username, () => { res.redirect('/game'); });
             break;
           default:
-            res.redirect('/auth/signin');
+            res.redirect('/auth/login');
             break;
         }
       })(req, res);
