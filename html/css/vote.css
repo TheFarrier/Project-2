@@ -1,0 +1,23 @@
+html,body {
+  font-family: 'Rubik', sans-serif;}
+.hero.is-info {
+	background-color: #74EBD5;
+	background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
+
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.hero .nav, .hero.is-success .nav {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.hero .subtitle {
+  padding: 1rem 0;
+  line-height: 1.5;
+}
+.tile {
+		border-radius: 0pt;
+		
+}
