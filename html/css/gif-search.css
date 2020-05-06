@@ -24,15 +24,19 @@ background-image: linear-gradient(180deg, #52ACFF 25%, #FFE32C 100%);
 .imageContainer {
 	width: 250px;
 	padding-left: 1rem;
+	
 
   }
 .image:hover {
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem 0 rgba(5, 5, 31, 0.5);
+    transform: translateY(-0.1rem);
+    transition: transform 150ms;
 
 }
 
 .title-from {
-	font-family: raleway, sans-serif;
+	font-family: 'Rubik', sans-serif;
 	font-weight: 700;
 	font-size: 18px;
 	color: #000;
@@ -40,30 +44,26 @@ background-image: linear-gradient(180deg, #52ACFF 25%, #FFE32C 100%);
 	padding-bottom: 15px;
 
 }
-
-
-
-
 .waiting-p {
 	text-align: center;
 	margin-top: 70px;
 }
 
 .title-waiting-t {
-	font-family: raleway, sans-serif;
+	font-family: 'Rubik', sans-serif;
 	font-weight: 700;
 	font-size: 120px;
 	margin: 0;
 }
 
 .title-waiting p {
-	font-family: open sans, sans-serif;
+	font-family: 'Rubik', sans-serif;
 	color: #7e7e7e;
 	font-size: 13px;
 }
 
 .sec-title {
-  font-family: raleway, sans-serif;
+	font-family: 'Rubik', sans-serif;
 	font-weight: 500;
 	font-size: 50px;
 	margin: 0;
