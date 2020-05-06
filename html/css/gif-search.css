@@ -132,3 +132,9 @@ background-image: linear-gradient(180deg, #52ACFF 25%, #FFE32C 100%);
 	font-size: 50px;
 	margin: 0;
 }
+.seconds {
+	font-family: raleway, sans-serif;
+	font-weight: 500;
+	font-size: 50px;
+	margin: 0;
+}
