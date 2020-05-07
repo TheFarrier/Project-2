@@ -8,7 +8,7 @@ function votingState(){
         gifs.forEach((content) => {
             let newDiv = `<div class="votingGif"><img src=${content.gif} data=${content.username}></div>`
             $(this).click((event) => {
-                console.log($(event.target).attr('data'));
+                console.log($(event.target.id).attr('data'));
             })
             $('#gif-container').append(newDiv);
         })

@@ -5,20 +5,22 @@ const fs = require('fs');
 const readyHTML = fs.readFileSync("./views/game-partials/ready.handlebars", "utf8")
 const searchHTML = fs.readFileSync("./views/game-partials/search.handlebars", "utf8")
 const votingHTML = fs.readFileSync("./views/game-partials/vote.handlebars", "utf8")
+const outcomeHTML = fs.readFileSync("./views/game-partials/outcome.handlebars", "utf8")
 
 function mainSocket(io) {
   let players = [];
   let readyCheck = [];
   let votingGifs = [];
   let questionHistory = [];
-  let maxPlayers = 2;
+  let maxPlayers = 3;
 
   let searchTime = 10;
-  let voteTime = 10;
+  let voteTime = 30;
 
   let searchTimer;
   let voteTimer;
   let outcomeTimer;
+  
 
 
   
@@ -48,6 +50,14 @@ function mainSocket(io) {
       socket.emit('redirect', { url: 'http://localhost:3000/auth/logout' });
     }
     
+    socket.on('newMessageToServer', (msg) => {
+      const fullMsg = {
+          username: socket.request.session.passport.user,
+          text: msg.text, 
+      }
+      io.of('/').to('lobby').emit('messageToClients', fullMsg)
+    });
+
     socket.on('gifSelected', (url) => {
       let playerSelection = {
         username: socket.request.session.passport.user,
@@ -84,10 +94,9 @@ function mainSocket(io) {
     {
       voteTime -=1;
       io.of('/').in('lobby').emit('timer', voteTime);
-      
+
       if(voteTime === 0)
       {
-
         clearInterval(voteTimer);
       }
     }
@@ -102,7 +111,9 @@ function mainSocket(io) {
     });
 
   });
- 
+  
+  
+
   function generateQuestion()
   {
     console.log(gameQuestions.length);

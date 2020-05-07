@@ -2,12 +2,27 @@
 const socket = io('http://localhost:3000', { timeout: 2000 });
 
 socket.on('playerListener', (data) => {
+   $('#messages').empty();
    data.playersList.forEach((player) => {
-    let li = ` <li><div class="user-name">server<span class="message-text">${player} has joined!</span></div></li>`
+    let li = ` <li><div class="user-name">Server: <span class="message-text">${player} has joined!</span></div></li>`
     $('#messages').append(li);
    });
     
 });
+socket.on('messageToClients', (data) =>{
+    let li = ` <li><div class="user-name">${data.username}: <span class="message-text">${data.text}</span></div></li>`
+    $('#messages').append(li);
+})
+$('.message-form').submit(formSubmission);
+function formSubmission(event)
+{
+    event.preventDefault();
+    console.log('sub')
+    const newMessage = $('#user-message').val();
+    console.log(newMessage);
+    socket.emit('newMessageToServer', {text: newMessage});
+}
+
 socket.on('stateListener', (data) => {
     $('#gameWindow').empty();
     $('#gameWindow').append(data.html);
@@ -38,8 +53,3 @@ socket.on('playersLoaded', () => {
     });
 });
 
-
-//    $('.announcer-text').animate({ transition: '.3s', opacity: 0 });
-//$('.announcer-gif').animate({ transition: '.3s', opacity: 0 });
-//$('.ready-up').animate({ transition: '.0s', opacity: 0 });
-//socket.emit('playerReady', {ready: true});
