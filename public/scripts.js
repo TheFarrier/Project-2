@@ -1,8 +1,12 @@
 /* eslint-disable no-undef */
 const socket = io('http://localhost:3000', { timeout: 2000 });
 
-socket.on('playerListener', (players) => {
-    console.log(players);
+socket.on('playerListener', (data) => {
+   data.playersList.forEach((player) => {
+    let li = ` <li><div class="user-name">server<span class="message-text">${player} has joined!</span></div></li>`
+    $('#messages').append(li);
+   });
+    
 });
 socket.on('stateListener', (data) => {
     $('#gameWindow').empty();
@@ -30,6 +34,7 @@ socket.on('playersLoaded', () => {
     $('.ready-up').one('click', (e)=> {
         socket.emit('playerReady', {ready: true});
         searchState();
+        votingState();
     });
 });
 

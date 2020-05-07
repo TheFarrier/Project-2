@@ -1,17 +1,27 @@
 const handlebars = require('handlebars');
 const gameQuestions = require('./gameQuestions.js');
 const fs = require('fs');
-   
+
 const readyHTML = fs.readFileSync("./views/game-partials/ready.handlebars", "utf8")
 const searchHTML = fs.readFileSync("./views/game-partials/search.handlebars", "utf8")
+const votingHTML = fs.readFileSync("./views/game-partials/vote.handlebars", "utf8")
 
 function mainSocket(io) {
   let players = [];
   let readyCheck = [];
+  let votingGifs = [];
   let questionHistory = [];
   let maxPlayers = 2;
-  let gameTime = 300;
 
+  let searchTime = 10;
+  let voteTime = 10;
+
+  let searchTimer;
+  let voteTimer;
+  let outcomeTimer;
+
+
+  
   io.on('connection', (socket) => {
 
     if (socket.request.session.passport) {
@@ -38,17 +48,56 @@ function mainSocket(io) {
       socket.emit('redirect', { url: 'http://localhost:3000/auth/logout' });
     }
     
-    function countDown()
+    socket.on('gifSelected', (url) => {
+      let playerSelection = {
+        username: socket.request.session.passport.user,
+        gif: url
+      };
+      if(votingGifs.findIndex(i => i.username === playerSelection.username) === -1)
+      {
+        votingGifs.push(playerSelection);
+      }
+      else{
+        votingGifs.forEach((player) => {
+          if(player.username === playerSelection.username)
+          {
+            player.gif = url
+          }
+        });
+      }
+    });
+
+    function countDownSearch()
     {
-      gameTime -= 1;
+      searchTime -= 1;
+      io.of('/').in('lobby').emit('timer', searchTime);
+
+      if(searchTime === 0)
+      {
+        io.of('/').in('lobby').emit('gameStateVote', {gifs: votingGifs, html: votingHTML});
+        clearInterval(searchTimer);
+        voteTimer = setInterval(countDownVote, 1000)
+      }
+    }
+
+    function countDownVote()
+    {
+      voteTime -=1;
+      io.of('/').in('lobby').emit('timer', voteTime);
+      
+      if(voteTime === 0)
+      {
+
+        clearInterval(voteTimer);
+      }
     }
 
     socket.on('playerReady', (data) => {
       readyCheck.push(data.ready);
       if(readyCheck.length === maxPlayers){
        let questionText = generateQuestion();
-       io.of('/').in('lobby').emit('startGame', {question: questionText, html: searchHTML});
-        let gameTimer = setInterval(countDown, 1000);
+       io.of('/').in('lobby').emit('gameStateSearch', {question: questionText, html: searchHTML});
+        searchTimer = setInterval(countDownSearch, 1000);
       }
     });
 
