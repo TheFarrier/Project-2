@@ -19,10 +19,10 @@ app.set('view engine', 'handlebars');
 const authRouter = require('./src/routes/authRoutes.js');
 const serverRouter = require('./src/routes/serverRoutes.js');
 
-app.use('/auth', authRouter());
-app.use('/game', serverRouter());
+app.use( "/auth", authRouter() );
+app.use( "/game", serverRouter() );
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync().then( () => {
   // eslint-disable-next-line no-console
   const expressServer = app.listen(Port, () => console.log(`Example app listening at http://localhost:${Port}`));
   const io = socketio(expressServer);
