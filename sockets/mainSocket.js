@@ -14,8 +14,10 @@ function mainSocket(io) {
   let questionHistory = [];
   let maxPlayers = 3;
 
-  let searchTime = 10;
-  let voteTime = 30;
+  let roundCount = 0;
+  let searchTime = 30;
+  let voteTime = 20;
+  let outcomeTime = 5;
 
   let searchTimer;
   let voteTimer;
@@ -86,7 +88,8 @@ function mainSocket(io) {
       {
         io.of('/').in('lobby').emit('gameStateVote', {gifs: votingGifs, html: votingHTML});
         clearInterval(searchTimer);
-        voteTimer = setInterval(countDownVote, 1000)
+        voteTime = 20;
+        voteTimer = setInterval(countDownVote, 1000);
       }
     }
 
@@ -97,7 +100,30 @@ function mainSocket(io) {
 
       if(voteTime === 0)
       {
+        io.of('/').in('lobby').emit('gameStateOutcome', {gifs: votingGifs, html: votingHTML});
         clearInterval(voteTimer);
+        outcomeTime = 5
+        outcomeTimer = setInterval(countDownOutcome, 1000);
+      }
+    }
+
+    function countDownOutcome()
+    {
+      outcomeTime -=1;
+      io.of('/').in('lobby').emit('timer', outcomeTime);
+
+      if(outcomeTime === 0 && roundCount !== 5)
+      {
+        io.of('/').in('lobby').emit('gameStateSearch', {question: questionText, html: searchHTML});
+        clearInterval(outcomeTimer);
+        searchTime = 30;
+        searchTimer = setInterval(countDownSearch, 1000);
+        roundCount -=1;
+      } 
+      else if (roundCount === 5)
+      {
+        io.of('/').in('lobby').emit('gameStateEnd', {question: questionText, html: searchHTML});
+        clearInterval(outcomeTimer);
       }
     }
 
