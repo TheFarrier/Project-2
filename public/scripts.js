@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const socket = io('http://localhost:3000', { timeout: 2000 });
+const socket = io('https://gif-lash.herokuapp.com/', { timeout: 2000 });
 
 socket.on('playerListener', (data) => {
    $('#messages').empty();
