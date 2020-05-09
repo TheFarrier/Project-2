@@ -12,7 +12,7 @@ function mainSocket(io) {
   let readyCheck = [];
   let votingGifs = [];
   let questionHistory = [];
-  let maxPlayers = 3;
+  let maxPlayers = 2;
 
   let roundCount = 0;
   let searchTime = 30;
