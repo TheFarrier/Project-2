@@ -22,6 +22,10 @@ const serverRouter = require('./src/routes/serverRoutes.js');
 app.use( "/auth", authRouter() );
 app.use( "/game", serverRouter() );
 
+app.get("/", function(req, res){
+  res.redirect("/auth/login");
+})
+
 db.sequelize.sync().then( () => {
   // eslint-disable-next-line no-console
   const expressServer = app.listen(Port, () => console.log(`Example app listening at http://localhost:${Port}`));
