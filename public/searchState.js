@@ -21,7 +21,7 @@ function searchState()
     const gifContainer = $("#gif-container");
     gifContainer.empty();
     const gifKeyword = $("input.searchInput");
-    const queryURL = `http://api.giphy.com/v1/gifs/search?q=${gifKeyword.val().trim()}&api_key=PgqiZ72BDLSFVrW4QL7p7F3gUgiXSbLo`;
+    const queryURL = `https://api.giphy.com/v1/gifs/search?q=${gifKeyword.val().trim()}&api_key=PgqiZ72BDLSFVrW4QL7p7F3gUgiXSbLo`;
     $.ajax({
       url: queryURL,
       method: "GET"
