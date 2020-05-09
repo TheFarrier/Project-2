@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Players.associate = function(models) {
-    Players.belongsTo(models.Users);
+    Players.belongsTo(models.User);
   };
 
   return Players;
