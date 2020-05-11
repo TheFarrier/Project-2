@@ -2,7 +2,7 @@
 
 
 
-<div class="game-landing-pg">
+<main id="game-landing-pg">
 
    <nav class="navbar">
         <a class="navbar-brand" href="#">GIF-LASH</a>
@@ -12,34 +12,13 @@
             </li>
         </ul>
    </nav>
-    <div id="mainWindow" class="container-fluid">
+   
+    <section id="main-window" class="container-fluid">
+      
+       
+    </section>
 
-        <div class="row">
-
-        <div id="gameWindow" class="col-lg-9 col-sm-6 col-xs-6">
-
-        </div>
-
-        <div id="chatWindow" class="col-lg-3 col-sm-6 col-xs-6">
-
-            <div class="message-form">
-                <form id="user-input">
-                    <div class="col-sm-12">
-                        <input id="user-message" type="text" placeholder="Enter your message" />
-                    </div>
-                </form>
-            </div>
-           <ul id="messages" class="col-sm-12">
-                <li>
-                   <div class="user-name"><span class="message-text"></span></div>
-                </li>
-            </ul>
-        </div>
-    </div>
-  
-    </div>
-
-</div>
+</main>
 
 <footer class="footer">
          <p class="footer-text">© Copyright</p>
@@ -48,5 +27,7 @@
 
 <script src="socket.io/socket.io.js"></script>
 <script src="/scripts.js"></script>
+<script src="/joinNs.js"></script>
 <script src="/searchState.js"></script>
 <script src="/votingState.js"></script>
+<script src="/outcomeState.js"></script>

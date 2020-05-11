@@ -1,15 +1,15 @@
 function searchState()
 {
-    socket.on('timer', (data) => {
+    nsSocket.on('timer', (data) => {
         console.log(data);
     });
-    socket.on('gameStateSearch', (data) => {
+    nsSocket.on('gameStateSearch', (data) => {
         $('#gameWindow').empty();
         $('#gameWindow').append(data.html);
         $('#search-box').submit((event) => {searchGif(event)})
         $('.announcer-text').text(data.question)
     });
-    socket.on('timer', (data) => {
+    nsSocket.on('timer', (data) => {
         $('.time').text(data);
     })
 
@@ -17,7 +17,6 @@ function searchState()
     {
         
     event.preventDefault();
-    const selectionBtn = $("img.image"); // The selection box from after the search
     const gifContainer = $("#gif-container");
     gifContainer.empty();
     const gifKeyword = $("input.searchInput");
@@ -42,8 +41,8 @@ function searchState()
             gifContainer.append(newGif);
         }
         function selectGif() {
-            url = $(this).attr("src")
-            socket.emit('gifSelected', url);
+             let selected = $(this).attr("src")
+            nsSocket.emit('gifSelected', selected);
         };
     });
         

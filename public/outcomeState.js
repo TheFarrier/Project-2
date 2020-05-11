@@ -1,11 +1,19 @@
 function outcomeState(){
-    console.log('content hit');
-    socket.on('gameStateOutcome', (data) => {
+
+    nsSocket.on('gameStateOutcome', (data) => {
         $('#gameWindow').empty();
         $('#gameWindow').append(data.html);
+        $('.announcer-text').text(data.text)
     });
 
-    socket.on('timer', (data) => {
+    nsSocket.on('gameStateFinalOutcome', (data) => {
+        $('#gameWindow').empty();
+        $('#gameWindow').append(data.html);
+        $('#timer-box').empty();
+        $('.announcer-text').text(data.text)
+    });
+
+    nsSocket.on('timer', (data) => {
         $('.time').text(data);
     })
 }
