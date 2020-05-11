@@ -1,167 +1,126 @@
-const handlebars = require('handlebars');
-const gameQuestions = require('./gameQuestions.js');
+
+const Namespace = require('./classes/Namespace.js');
+const Room = require('./classes/Room.js');
+const GameHandler = require('./classes/GameHandler.js')
+
 const fs = require('fs');
-
-const readyHTML = fs.readFileSync("./views/game-partials/ready.handlebars", "utf8")
-const searchHTML = fs.readFileSync("./views/game-partials/search.handlebars", "utf8")
-const votingHTML = fs.readFileSync("./views/game-partials/vote.handlebars", "utf8")
-const outcomeHTML = fs.readFileSync("./views/game-partials/outcome.handlebars", "utf8")
-
-function mainSocket(io) {
-  let players = [];
-  let readyCheck = [];
-  let votingGifs = [];
-  let questionHistory = [];
-  let maxPlayers = 2;
-
-  let roundCount = 0;
-  let searchTime = 30;
-  let voteTime = 20;
-  let outcomeTime = 5;
-
-  let searchTimer;
-  let voteTimer;
-  let outcomeTimer;
-  
+const mainLobbyHTML = fs.readFileSync("./views/game-partials/main_lobby.html", "utf8")
 
 
-  
-  io.on('connection', (socket) => {
+function mainSocket(io){
 
-    if (socket.request.session.passport) {
-      let playerTag = socket.request.session.passport.user;
-      console.log(`${playerTag} has connected`)
-      io.clients((err, clients) => {
-        if (clients.length <= maxPlayers){
-          if(players.indexOf(playerTag) === -1) {
-            players.push(playerTag);
+    let namespaces = [];
+
+    io.on('connection', (socket) => {
+        
+        let username;
+
+        if (socket.request.session.passport) {
+            username = socket.request.session.passport.user;
+            console.log(`${username} has connected`);
+            socket.emit('welcomeMessage', {text: `Welcome ${username}!`, html: mainLobbyHTML});
           }
-          socket.join('lobby', () => {
-            console.log(`${playerTag} has joined lobby`)
-            io.to('lobby').emit('playerListener', {playersList: players});
-            io.to('lobby').emit('stateListener', {html: readyHTML});
-            if(players.length === maxPlayers){
-              io.of('/').in('lobby').emit('playersLoaded');
-            }
-          });
-        }
-      });
+          else {
+            socket.emit('redirect', { url: 'http://localhost:3000/auth/logout' });
+          }
 
-    }
-    else {
-      socket.emit('redirect', { url: 'http://localhost:3000/auth/logout' });
-    }
-    
-    socket.on('newMessageToServer', (msg) => {
-      const fullMsg = {
-          username: socket.request.session.passport.user,
-          text: msg.text, 
-      }
-      io.of('/').to('lobby').emit('messageToClients', fullMsg)
-    });
-
-    socket.on('gifSelected', (url) => {
-      let playerSelection = {
-        username: socket.request.session.passport.user,
-        gif: url
-      };
-      if(votingGifs.findIndex(i => i.username === playerSelection.username) === -1)
-      {
-        votingGifs.push(playerSelection);
-      }
-      else{
-        votingGifs.forEach((player) => {
-          if(player.username === playerSelection.username)
+        socket.on('createServer', (data) => {
+         if(validateSettings(data))
           {
-            player.gif = url
+              
+            let title = data.settings[0].serverName;
+            let password = data.settings[1].password;
+            let playerCount = data.settings[2].playerCount;
+            let roundNumber = data.settings[3].roundNumber;
+            let searchTimer = data.settings[4].searchTimer;
+            let voteTimer = data.settings[5].voteTimer;
+            let rating = data.settings[6].questionType;
+
+            const newNamespace = new Namespace(title, playerCount, roundNumber, voteTimer, searchTimer, rating, password, username);
+            newNamespace.addRoom(new Room(newNamespace));
+
+            const newGameHandler = new GameHandler(io, newNamespace);
+            
+            if(namespaces.length === 0 && username !==undefined){
+                namespaces.push(newNamespace);
+                newGameHandler.initLobby();
+            }
+            else{
+                namespaces.forEach((namespace) => {
+                    if(namespace.host.indexOf(username) === -1 && username !==undefined)
+                    {
+                        namespaces.push(newNamespace);
+                        newGameHandler.initLobby();
+                    }
+                    else{
+                        //todo handle case for already existing namespace
+                    }
+                  });
+            }
           }
+          else if(!validateSettings(data))
+          {
+            //todo handle case for failed validation
+          }
+        
         });
-      }
+        socket.on('getNsList', () => {
+           let tableHtml = [];
+            namespaces.forEach((namespace) => {
+                io.of(namespace.endpoint).clients((err, clients) => {
+                    let tr = ` 
+                    <tr class="namespace" data=${namespace.endpoint}>
+                    <td>${namespace.nsTitle}</td>
+                    <td>${clients.length}/${namespace.maxClientCnt}</td>
+                    <td>${namespace.rating}</td>
+                    </tr>`
+                    tableHtml.push(tr);
+                    if(tableHtml.length === namespaces.length){
+                        socket.emit('newNsList', {html: tableHtml})
+                    } 
+                 })
+            });
+        });
+
+        socket.on('closeNs', (data) => {
+                namespaces.forEach((namespace, indx) => {
+                    if(namespace.endpoint === data.endpoint)
+                    {
+                        namespaces.splice(indx);
+                    }
+                });
+        });
     });
 
-    function countDownSearch()
-    {
-      searchTime -= 1;
-      io.of('/').in('lobby').emit('timer', searchTime);
-
-      if(searchTime === 0)
-      {
-        io.of('/').in('lobby').emit('gameStateVote', {gifs: votingGifs, html: votingHTML});
-        clearInterval(searchTimer);
-        voteTime = 20;
-        voteTimer = setInterval(countDownVote, 1000);
-      }
-    }
-
-    function countDownVote()
-    {
-      voteTime -=1;
-      io.of('/').in('lobby').emit('timer', voteTime);
-
-      if(voteTime === 0)
-      {
-        io.of('/').in('lobby').emit('gameStateOutcome', {gifs: votingGifs, html: votingHTML});
-        clearInterval(voteTimer);
-        outcomeTime = 5
-        outcomeTimer = setInterval(countDownOutcome, 1000);
-      }
-    }
-
-    function countDownOutcome()
-    {
-      outcomeTime -=1;
-      io.of('/').in('lobby').emit('timer', outcomeTime);
-
-      if(outcomeTime === 0 && roundCount !== 5)
-      {
-        io.of('/').in('lobby').emit('gameStateSearch', {question: questionText, html: searchHTML});
-        clearInterval(outcomeTimer);
-        searchTime = 30;
-        searchTimer = setInterval(countDownSearch, 1000);
-        roundCount -=1;
-      } 
-      else if (roundCount === 5)
-      {
-        io.of('/').in('lobby').emit('gameStateEnd', {question: questionText, html: searchHTML});
-        clearInterval(outcomeTimer);
-      }
-    }
-
-    socket.on('playerReady', (data) => {
-      readyCheck.push(data.ready);
-      if(readyCheck.length === maxPlayers){
-       let questionText = generateQuestion();
-       io.of('/').in('lobby').emit('gameStateSearch', {question: questionText, html: searchHTML});
-        searchTimer = setInterval(countDownSearch, 1000);
-      }
-    });
-
-  });
-  
-  
-
-  function generateQuestion()
-  {
-    console.log(gameQuestions.length);
-    let generatedIndex = Math.floor(Math.random() * gameQuestions.length)
-    let generatedQuestion = gameQuestions[generatedIndex];
-    if(questionHistory.indexOf(generatedQuestion) === -1){
-      questionHistory.push(generatedQuestion)
-      return generatedQuestion.question;
-    }
-    else if(questionHistory.length != gameQuestions.length){
-      generateQuestion();
-    } 
-    else
-    {
-      return 'Out of questions!'
-    }
-  }
 }
 
+function validateSettings(data){
+    //check for setting length to be number of inputs on form ✓
+    //check if the setting is not empty, null or undefined ✓
+    //todo create more server validation for settings X
+    let requiredSettingLength = 7;
+    let cb = (msg, isValid) =>{
+        console.log(msg)
+        return isValid
+    }
+    if(data.settings === undefined)
+    {
 
+        return cb('data.settings is undefined', false);
 
+    }
+    if(data.settings.length !== requiredSettingLength)
+    {
+        return cb(`data.settings length is less than ${requiredSettingLength}`, false);
+    }
+    data.settings.forEach((setting) => {
+        let settingValue = Object.values(setting)[0];
+        if(settingValue === "" || settingValue === null || settingValue === undefined)
+        {
+            return cb(`${settingValue} error check if '', null or undefined`, false);
+        }
+    });
 
+    return true;
+}
 module.exports = mainSocket;
-
-//game states that we need

@@ -5,7 +5,8 @@ const db = require("../../models");
 const authRouter = express.Router();
 
 module.exports = function router() {
-  authRouter.route("/register")
+
+  authRouter.route('/register')
     .get((req, res) => {
       if (req.user) {
         return res.redirect("/game");
@@ -28,11 +29,13 @@ module.exports = function router() {
         });
       });
     });
-  authRouter.route("/logout")
+
+  authRouter.route('/logout')
     .get((req, res) => {
       req.logout();
       res.redirect('/auth/login');
     });
+
   authRouter.route('/login')
     .get((req, res) => {
       if (req.user) {
@@ -74,7 +77,6 @@ module.exports = function router() {
             });
             break;
           case ('Validated.'):
-
             req.login(user.username, () => { res.redirect('/game'); });
             break;
           default:
@@ -82,6 +84,7 @@ module.exports = function router() {
             break;
         }
       })(req, res);
+
     });
 
   return authRouter;

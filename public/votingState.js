@@ -1,20 +1,29 @@
 function votingState(){
-    console.log('content hit');
-    socket.on('gameStateVote', (data) => {
+
+    nsSocket.on('gameStateVote', (data) => {
         $('#gameWindow').empty();
         $('#gameWindow').append(data.html);
+
         let gifs = data.gifs;
-        console.log(data);
-        gifs.forEach((content) => {
-            let newDiv = `<div class="votingGif"><img src=${content.gif} data=${content.username}></div>`
-            $(this).click((event) => {
-                console.log($(event.target.id).attr('data'));
-            })
-            $('#gif-container').append(newDiv);
-        })
+        
+        nsSocket.emit('getUser');
+        nsSocket.on('userName', (user) => {
+            gifs.forEach((content) => {
+                if(content.username !== user.username){
+                    let newImg = `<div class="gifDiv"> <img src=${content.selection} class="votingGif" data=${content.username}></div>`
+                    $('#gif-container').append(newImg);
+                    $(document).on('click', '.votingGif', (event) => {
+                        let vote = $(event.target).attr('data')
+                        nsSocket.emit('gifSelected', vote);
+                    });
+                }
+            });
+            gifs.length = 0;
+        });
+       
     });
 
-    socket.on('timer', (data) => {
+    nsSocket.on('timer', (data) => {
         $('.time').text(data);
-    })
+    });
 }
