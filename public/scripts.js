@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-// const socket = io('https://gif-lash.herokuapp.com/', { timeout: 2000 });
+const socket = io('https://gif-lash.herokuapp.com/', { timeout: 2000 });
 
 
-const socket = io('http://localhost:3000');
+// const socket = io('http://localhost:3000');
 let nsSocket = "";
 socket.on('welcomeMessage', (data) => {
     $('#main-window').append(data.html);

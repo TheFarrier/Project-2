@@ -4,7 +4,8 @@ function joinNs(endpoint){
     {
         nsSocket.close();
     }
-    nsSocket = io(`http://localhost:3000${endpoint}`);
+    //nsSocket = io(`http://localhost:3000${endpoint}`);
+    nsSocket = io(`https://gif-lash.herokuapp.com/${endpoint}`);
 
     nsSocket.on('initGame', (data) => {  
         $('#main-window').empty();
