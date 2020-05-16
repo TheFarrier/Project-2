@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars');
 const session = require('express-session');
 const socketio = require('socket.io');
 const db = require('./models');
+const compression = require('compression');
 
 const app = express();
 const Port = process.env.PORT || 3000;
@@ -26,6 +27,8 @@ app.get("/", function(req, res){
   res.redirect("/auth/login");
 })
 
+app.use(compression())
+
 db.sequelize.sync().then( () => {
   // eslint-disable-next-line no-console
   const expressServer = app.listen(Port, () => console.log(`Example app listening at http://localhost:${Port}`));
@@ -35,3 +38,5 @@ db.sequelize.sync().then( () => {
   });
   require('./sockets/mainSocket.js')(io);
 });
+
+
