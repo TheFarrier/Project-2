@@ -12,6 +12,8 @@ const sessionMiddleware = session({ secret: 'secret', resave: false, saveUniniti
 app.use(sessionMiddleware);
 require('./config/passport.js')(app);
 
+
+app.use(compression())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
@@ -27,7 +29,6 @@ app.get("/", function(req, res){
   res.redirect("/auth/login");
 })
 
-app.use(compression())
 
 db.sequelize.sync().then( () => {
   // eslint-disable-next-line no-console
