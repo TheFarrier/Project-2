@@ -1,5 +1,4 @@
-# Project-2
-Gif-Lash
+# Gif-Lash
 
 This browser based game will host up to _# users in a room to play a humorous party game.
 Users scores for this game will be posted to a database table along with their username.
