@@ -19,3 +19,11 @@ In this phase, all the player's gifs are shown anonymously, and players vote on 
 -A timer will count down from 30 seconds before automatically moving on.
 
 The game then shows another question or phrase, and loops for _# rounds
+
+# Technologies Used
+
+Socket.io for creating separate lobbies for games and updating the game state
+
+MySQL and Sequelize to handle user database
+
+Passport and bcrypt for user authentication and encryption
